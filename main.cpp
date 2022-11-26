@@ -17,12 +17,14 @@ void load(vector<Person> &persons,
           vector<Course> &courses,
           vector<StudentCourse> &studentCourses)
 {
+    Person::load(persons);
 }
 void save(vector<Person> &persons,
           vector<Student> &students,
           vector<Course> &courses,
           vector<StudentCourse> &studentCourses)
 {
+    Person::write(persons);
 }
 
 int main(int argc, char const *argv[])

@@ -11,7 +11,7 @@ namespace school
                    std::string surname,
                    std::string firstname,
                    std::string birthDate,
-                   gender gender)
+                   Gender gender)
 
     {
         _id = id;
@@ -35,7 +35,7 @@ namespace school
         os << ", firstname:" << _firstname;
         os << ", birthDate:" << _birthDate;
         os << ", gender:" << _gender;
-        os << "}";
+        os << "}\n";
 
         return os.str();
     }
@@ -49,6 +49,7 @@ namespace school
         os << "," << _firstname;
         os << "," << _birthDate;
         os << "," << _gender;
+        os << "\n";
 
         return os.str();
     }
@@ -69,6 +70,58 @@ namespace school
     }
 
     // static
+    void Person::load(std::vector<Person> &persons)
+    {
+        auto path = "person.sch";
+
+        std::ifstream file;
+
+        file.open(path);
+
+        if (!file.is_open())
+        {
+            return;
+        }
+
+        std::string line;
+
+        while (std::getline(file, line))
+        {
+            auto words = gcore::split(line, ",");
+
+            int id = std::stoi(words[0]);
+            std::string surname = words[1];
+            std::string firstname = words[2];
+            std::string birthDate = words[3];
+            auto gend = static_cast<school::Gender>(std::stoi(words[4]));
+
+            Person p(id, surname, firstname, birthDate, gend);
+
+            persons.push_back(p);
+        }
+
+        file.close();
+    }
+
+    void Person::write(std::vector<Person> &persons)
+    {
+        auto path = "person.sch";
+
+        std::ofstream file(path);
+
+        if (!file.is_open())
+        {
+            return;
+        }
+
+        for (auto &&v : persons)
+        {
+            file << v.toCsv();
+        }
+
+        file.close();
+    }
+
     void Person::create(std::vector<Person> &persons)
     {
         int maxID = persons.size();
@@ -101,21 +154,21 @@ namespace school
         std::cin.getline(text, 99);
         birthDate = text;
 
-        gender gender;
+        Gender gender;
         std::cout << "Enter gender (M, F or O): ";
         char key = std::cin.get();
         std::cin.ignore();
         if (std::toupper(key) == 'M')
         {
-            gender = gender::Male;
+            gender = Gender::Male;
         }
         else if (std::toupper(key) == 'F')
         {
-            gender = gender::Male;
+            gender = Gender::Male;
         }
         else
         {
-            gender = gender::None;
+            gender = Gender::None;
         }
 
         Person p(id, surname, firstname, birthDate, gender);
@@ -131,8 +184,7 @@ namespace school
         std::string firstname; // = gcore::FakeGen::getNAME();
         std::string birthDate; // = gcore::FakeGen::BIRTHDATE();
         char genderChar;       // = gcore::FakeGen::getGENDER();
-
-        gender gender;
+        Gender gender;
 
         for (int i = 0; i < count; i++)
         {
@@ -147,13 +199,13 @@ namespace school
             switch (genderChar)
             {
             case 'M':
-                gender = gender::Male;
+                gender = Gender::Male;
                 break;
             case 'F':
-                gender = gender::Female;
+                gender = Gender::Female;
                 break;
             default:
-                gender = gender::None;
+                gender = Gender::None;
                 break;
             }
 
@@ -167,7 +219,7 @@ namespace school
     {
         for (auto &&v : persons)
         {
-            std::cout << v.toString() << std::endl;
+            std::cout << v.toString();
         }
     }
 

@@ -6,7 +6,7 @@
 
 namespace school
 {
-    enum gender
+    enum Gender
     {
         None,
         Male,
@@ -20,20 +20,23 @@ namespace school
         std::string _surname;
         std::string _firstname;
         std::string _birthDate;
-        gender _gender;
+        Gender _gender;
 
     public:
         Person(int id,
                std::string surname,
                std::string firstname,
                std::string birthDate,
-               gender gender);
+               Gender gender);
 
         ~Person();
 
         std::string toString();
         std::string toCsv();
         std::string toJson();
+
+        static void load(std::vector<Person> &persons);
+        static void write(std::vector<Person> &persons);
 
         static void create(std::vector<Person> &persons);
         static Person input(int &maxID);
