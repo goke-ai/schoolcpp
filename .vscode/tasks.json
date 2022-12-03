@@ -8,6 +8,7 @@
                 "-fcolor-diagnostics",
                 "-fansi-escape-codes",
                 "-std=c++20", // "-std=c++17",
+                "-stdlib=libc++",
                 //    "-v",
                 "-I",
                 "/Users/goke/Library/CloudStorage/OneDrive-Personal/zs/core/cpp/CPPConsoleApp/include",

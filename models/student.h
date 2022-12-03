@@ -1,5 +1,4 @@
-#if !defined(_STUDENT_H_)
-#define _STUDENT_H_
+#pragma once
 
 #include <vector>
 #include <string>
@@ -9,24 +8,70 @@ namespace school
     class Student
     {
     private:
-        /* data */
+        int _id = 0;
+        std::string _studentNo;
+        std::string _department;
+        int _personId;
+
+        static std::string _path;
+        static std::vector<Student> _data;
+
     public:
-        Student(/* args */);
+        Student();
+        Student(int id,
+                std::string studentNo,
+                std::string department,
+                int personId);
+
         ~Student();
+
+        const int &getId() const { return _id; }
+        void setId(int id) { _id = id; }
+
+        const std::string &getStudentNo() const { return _studentNo; }
+        void setStudentNo(std::string studentNo) { _studentNo = studentNo; }
+
+        const std::string &getDepartment() const { return _department; }
+        void setDepartment(std::string department) { _department = department; }
+
+        const int &getPersonId() const { return _personId; }
+        void setPersonId(int personId) { _personId = personId; }
+
+        const std::string getPersonName() const;
+        const std::string getGender() const;
+        const std::string getBirthDate() const;
 
         std::string toString();
         std::string toCsv();
         std::string toJson();
 
-        static void create(std::vector<Student> &students);
-        static Student input(int &maxID);
-        static void generate(std::vector<Student> &students);
+        void detailsReport();
+        void transcriptReport();
+        void openTranscript();
 
-        static void list(std::vector<Student> &students);
-        static void add(std::vector<Student> &students, Student student);
-        static void edit(std::vector<Student> &students, Student student);
-        static void remove(std::vector<Student> &students, int id);
+        // statics
+        static std::vector<Student> &getData();
+
+        static bool hasData();
+        static bool isExisting(Student student);
+
+        static void load();
+        static void write();
+        static void clean();
+
+        static Student input(int &maxID);
+        static bool generate(int count = 20);
+        static void list();
+        static bool create();
+        static bool edit();
+        static bool remove();
+        static void listReport();
+        static void detailsReports();
+        static bool transcriptsReports();
+        static void openTranscripts();
+
+        static bool add(Student student);
+        static bool update(Student student);
+        static bool deletee(int id);
     };
 } // namespace school
-
-#endif // _STUDENT_H_

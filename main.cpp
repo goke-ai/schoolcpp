@@ -3,29 +3,10 @@
 using namespace std;
 using namespace school;
 
-// enum MenuItem
-// {
-//     None,
-//     AddPerson,
-//     ViewPersons,
-//     GenPersons
-// };
-
 char menu();
-void load(vector<Person> &persons,
-          vector<Student> &students,
-          vector<Course> &courses,
-          vector<StudentCourse> &studentCourses)
-{
-    Person::load(persons);
-}
-void save(vector<Person> &persons,
-          vector<Student> &students,
-          vector<Course> &courses,
-          vector<StudentCourse> &studentCourses)
-{
-    Person::write(persons);
-}
+void load();
+void save();
+void clean();
 
 int main(int argc, char const *argv[])
 {
@@ -33,12 +14,6 @@ int main(int argc, char const *argv[])
     cout << "Welcome to School Manager!!!\n";
 
     char key;
-    // MenuItem menuItem;
-
-    vector<Person> persons;
-    vector<Student> students;
-    vector<Course> courses;
-    vector<StudentCourse> studentCourses;
 
     while (true)
     {
@@ -47,42 +22,192 @@ int main(int argc, char const *argv[])
         switch (key)
         {
         case 'p':
-            Person::create(persons);
-            break;
+        {
+            cout << "start person create...\n";
+            Person::create();
+            cout << "...person create finished\n";
+        }
+        break;
         case 'l':
-            Person::list(persons);
-            break;
+        {
+            cout << "start person list...\n";
+            Person::list();
+            cout << "...person list finished\n";
+        }
+        break;
         case 'g':
-            Person::generate(persons);
-            break;
+        {
+            cout << "start person generate...\n";
+            Person::generate();
+            cout << "...person generate finished\n";
+        }
+        break;
+        case '1':
+        {
+            cout << "start person edit...\n";
+            Person::edit();
+            cout << "...person edit finished\n";
+        }
+        break;
+        case '5':
+        {
+            cout << "start person remove...\n";
+            Person::remove();
+            cout << "...person remove finished\n";
+        }
+        break;
 
-        case 's':
-            Student::create(students);
-            break;
+        case 'u':
+        {
+            cout << "start student create...\n";
+            Student::create();
+            cout << "...student create finished\n";
+        }
+        break;
         case 'm':
-            Student::list(students);
-            break;
+        {
+            cout << "start student list...\n";
+            Student::list();
+            cout << "...student list finished\n";
+        }
+        break;
+        case 'h':
+        {
+            cout << "start student generate...\n";
+            Student::generate();
+            cout << "...student generate finished\n";
+        }
+        break;
+        case '2':
+        {
+            cout << "start student edit...\n";
+            Student::edit();
+            cout << "...student edit finished\n";
+        }
+        break;
+        case '6':
+        {
+            cout << "start student remove...\n";
+            Student::remove();
+            cout << "...student remove finished\n";
+        }
+        break;
 
         case 'c':
-            Course::create(courses);
-            break;
+        {
+            cout << "start course create...\n";
+            Course::create();
+            cout << "...course create finished\n";
+        }
+        break;
         case 'n':
-            Course::list(courses);
-            break;
+        {
+            cout << "start course list...\n";
+            Course::list();
+            cout << "...course list finished\n";
+        }
+        break;
+        case 'i':
+        {
+            cout << "start course generate...\n";
+            Course::generate();
+            cout << "...course generate finished\n";
+        }
+        break;
+        case '3':
+        {
+            cout << "start course edit...\n";
+            Course::edit();
+            cout << "...course edit finished\n";
+        }
+        break;
+        case '7':
+        {
+            cout << "start course remove...\n";
+            Course::remove();
+            cout << "...course remove finished\n";
+        }
+        break;
 
         case 't':
-            StudentCourse::create(studentCourses);
-            break;
-        case 'o':
-            StudentCourse::list(studentCourses);
-            break;
+        {
+            cout << "start studentcourse create...\n";
+            StudentCourse::create();
+            cout << "...studentcourse create finished\n";
+        }
+        break;
+        case 'r':
+        {
+            cout << "start studentcourse list...\n";
+            StudentCourse::list();
+            cout << "...studentcourse list finished\n";
+        }
+        break;
+        case 'j':
+        {
+            cout << "start studentcourse generate...\n";
+            StudentCourse::generate();
+            cout << "...studentcourse generate finished\n";
+        }
+        break;
+        case '4':
+        {
+            cout << "start studentcourse edit...\n";
+            StudentCourse::edit();
+            cout << "...studentcourse edit finished\n";
+        }
+        break;
+        case '8':
+        {
+            cout << "start studentcourse remove...\n";
+            StudentCourse::remove();
+            cout << "...studentcourse remove finished\n";
+        }
+        break;
 
-        case 'f':
-            load(persons, students, courses, studentCourses);
-            break;
-        case 'w':
-            save(persons, students, courses, studentCourses);
-            break;
+        case 'a':
+        {
+            cout << "start student transcripts...\n";
+            Student::transcriptsReports();
+            cout << "...student transcripts finished\n";
+        }
+        break;
+        case 'b':
+        {
+            cout << "start course result-sheets...\n";
+            Course::resultSheetsRports();
+            cout << "...course result-sheets finished\n";
+        }
+        break;
+        case 'd':
+        {
+            cout << "start details reports...\n";
+            Student::detailsReports();
+            cout << "...details finished\n";
+        }
+        break;
+
+        case 'o':
+        {
+            cout << "start load...\n";
+            load();
+            cout << "...load finished\n";
+        }
+        break;
+        case 's':
+        {
+            cout << "start save...\n";
+            save();
+            cout << "...save finished\n";
+        }
+        break;
+        case 'x':
+        {
+            cout << "start clean...\n";
+            clean();
+            cout << "...clean finished\n";
+        }
+        break;
         default:
             break;
         }
@@ -98,12 +223,43 @@ int main(int argc, char const *argv[])
 char menu()
 {
     cout << endl;
-    cout << "Enter p, l to add, list Person: \n";
-    cout << "Enter q to quit: \n";
-    cout << "Enter p, or q: ";
+    cout << "Enter p, l, g, 1, 5 to add, list, generate, edit, delete Person: \n";
+    cout << "Enter u, m, h, 2, 6 to add, list, generate, edit, delete Student: \n";
+    cout << "Enter c, n, i, 3, 7 to add, list, generate, edit, delete Course: \n";
+    cout << "Enter t, r, j, 4, 8 to add, list, generate, edit, delete StudentCourse: \n";
+    cout << "Enter a, b, d to transcipts, result-sheets, details: \n";
+    cout << "Enter o, s, x, q to open, save, clean, quit: \n";
+    cout << "Enter p,u,c,t; l,m,n,r; g,h,i,j; 1,2,3,4; 5,6,7,8; a,b or o,s,x,q: ";
 
     char key = cin.get();
     cin.ignore();
 
     return key;
+}
+
+void load()
+{
+    Person::load();
+    Student::load();
+    Course::load();
+    StudentCourse::load();
+    Grade::load();
+}
+
+void save()
+{
+    Person::write();
+    Student::write();
+    Course::write();
+    StudentCourse::write();
+    Grade::write();
+}
+
+void clean()
+{
+    Person::clean();
+    Student::clean();
+    Course::clean();
+    StudentCourse::clean();
+    Grade::clean();
 }

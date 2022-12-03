@@ -1,5 +1,4 @@
-#if !defined(_COURSE_H_)
-#define _COURSE_H_
+#pragma once
 
 #include <vector>
 #include <string>
@@ -9,24 +8,71 @@ namespace school
     class Course
     {
     private:
-        /* data */
+        int _id = 0;
+        std::string _code;
+        std::string _title;
+        float _unit;
+        float _ca;
+        float _exam;
+
+        static std::string _path;
+        static std::vector<Course> _data;
+
     public:
-        Course(/* args */);
+        Course();
+        Course(int id,
+               std::string code,
+               std::string title,
+               float unit,
+               float ca,
+               float exam);
+
         ~Course();
+
+        const int &getId() const { return _id; }
+        void setId(int id) { _id = id; }
+
+        const std::string &getCode() const { return _code; }
+        void setCode(std::string code) { _code = code; }
+
+        const std::string &getTitle() const { return _title; }
+        void setTitle(std::string title) { _title = title; }
+
+        const float &getUnit() const { return _unit; }
+        void setUnit(float unit) { _unit = unit; }
+
+        const float &getCA() const { return _ca; }
+        void setCA(float ca) { _ca = ca; }
+
+        const float &getExam() const { return _exam; }
+        void setExam(float exam) { _exam = exam; }
 
         std::string toString();
         std::string toCsv();
         std::string toJson();
 
-        static void create(std::vector<Course> &courses);
-        static Course input(int &maxID);
-        static void generate(std::vector<Course> &courses);
+        void resultSheetReport();
 
-        static void list(std::vector<Course> &courses);
-        static void add(std::vector<Course> &courses, Course course);
-        static void edit(std::vector<Course> &courses, Course course);
-        static void remove(std::vector<Course> &courses, int id);
+        // statics
+        static std::vector<Course> &getData();
+
+        static bool hasData();
+        static bool isExisting(Course course);
+
+        static void load();
+        static void write();
+        static void clean();
+
+        static Course input(int &maxID);
+        static bool generate(int count = 20);
+        static void list();
+        static bool create();
+        static bool edit();
+        static bool remove();
+        static bool resultSheetsRports();
+
+        static bool add(Course course);
+        static bool update(Course course);
+        static bool deletee(int id);
     };
 } // namespace school
-
-#endif // _COURSE_H_

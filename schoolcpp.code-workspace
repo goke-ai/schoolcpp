@@ -75,8 +75,10 @@
 			"list": "cpp",
 			"regex": "cpp",
 			"stack": "cpp",
-			"iterator": "cpp"
-		}
+			"iterator": "cpp",
+			"thread": "cpp"
+		},
+		"liveServer.settings.multiRootWorkspaceName": "schoolcpp"
 	},
 	"extensions": {
 		"recommendations": [
