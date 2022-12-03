@@ -1,10 +1,10 @@
 {
     "configurations": [
         {
-            "name": "C/C++: clang++ build and debug",
+            "name": "(MacOS) build and debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/debug/osx/main",
+            "program": "${workspaceRoot}/bin/debug/osx/schoolcpp",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -14,10 +14,10 @@
             "preLaunchTask": "C/C++: clang++ build and debug",
         },
         {
-            "name": "C/C++: g++ build and debug",
+            "name": "(Linux) build and debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/debug/linux/main",
+            "program": "${workspaceRoot}/bin/debug/linux/schoolcpp",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -25,7 +25,19 @@
             "externalConsole": true,
             "MIMode": "lldb",
             "preLaunchTask": "C/C++: g++ build and debug"
-        }
+        },
+        {
+            "name": "(Windows) build and debug",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/debug/win/schoolcpp.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "externalTerminal",
+            "preLaunchTask": "C/C++: cl.exe build debug"
+        },
     ],
     "version": "2.0.0"
 }
