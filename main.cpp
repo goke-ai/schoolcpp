@@ -56,6 +56,13 @@ int main(int argc, char const *argv[])
             cout << "...person remove finished\n";
         }
         break;
+        case 'd':
+        {
+            cout << "start person detail reports...\n";
+            Person::detailReports();
+            cout << "...person detail reports finished\n";
+        }
+        break;
 
         case 'u':
         {
@@ -90,6 +97,13 @@ int main(int argc, char const *argv[])
             cout << "start student remove...\n";
             Student::remove();
             cout << "...student remove finished\n";
+        }
+        break;
+        case 'e':
+        {
+            cout << "start student detail reports...\n";
+            Student::detailReports();
+            cout << "...student detail reports finished\n";
         }
         break;
 
@@ -128,6 +142,13 @@ int main(int argc, char const *argv[])
             cout << "...course remove finished\n";
         }
         break;
+        case 'f':
+        {
+            cout << "start course detail reports...\n";
+            Course::detailReports();
+            cout << "...course detail reports finished\n";
+        }
+        break;
 
         case 't':
         {
@@ -164,26 +185,33 @@ int main(int argc, char const *argv[])
             cout << "...studentcourse remove finished\n";
         }
         break;
+        case 'k':
+        {
+            cout << "start studentcourse detail reports...\n";
+            StudentCourse::detailReports();
+            cout << "...studentcourse detail reports finished\n";
+        }
+        break;
 
         case 'a':
         {
             cout << "start student transcripts...\n";
-            Student::transcriptsReports();
+            Student::transcriptReports();
             cout << "...student transcripts finished\n";
         }
         break;
         case 'b':
         {
             cout << "start course result-sheets...\n";
-            Course::resultSheetsRports();
+            Course::resultSheetReports();
             cout << "...course result-sheets finished\n";
         }
         break;
-        case 'd':
+        case 'v':
         {
-            cout << "start details reports...\n";
-            Student::detailsReports();
-            cout << "...details finished\n";
+            cout << "start list reports...\n";
+            Student::listReport();
+            cout << "...list finished\n";
         }
         break;
 
@@ -223,13 +251,13 @@ int main(int argc, char const *argv[])
 char menu()
 {
     cout << endl;
-    cout << "Enter p, l, g, 1, 5 to add, list, generate, edit, delete Person: \n";
-    cout << "Enter u, m, h, 2, 6 to add, list, generate, edit, delete Student: \n";
-    cout << "Enter c, n, i, 3, 7 to add, list, generate, edit, delete Course: \n";
-    cout << "Enter t, r, j, 4, 8 to add, list, generate, edit, delete StudentCourse: \n";
-    cout << "Enter a, b, d to transcipts, result-sheets, details: \n";
+    cout << "Enter p, l, g, 1, 5, d to add, list|generate|edit|delete|details Person: \n";
+    cout << "Enter u, m, h, 2, 6, e to add, list|generate|edit|delete|details Student: \n";
+    cout << "Enter c, n, i, 3, 7, f to add, list|generate|edit|delete|details Course: \n";
+    cout << "Enter t, r, j, 4, 8, k to add, list|generate|edit|delete|details StudentCourse: \n";
+    cout << "Enter a, b, v to transcipts, result-sheets, list-Report: \n";
     cout << "Enter o, s, x, q to open, save, clean, quit: \n";
-    cout << "Enter p,u,c,t; l,m,n,r; g,h,i,j; 1,2,3,4; 5,6,7,8; a,b or o,s,x,q: ";
+    cout << "Enter p,u,c,t; l,m,n,r; g,h,i,j; 1,2,3,4; 5,6,7,8; d,e,f,k; a,b,v or o,s,x,q: ";
 
     char key = cin.get();
     cin.ignore();

@@ -44,7 +44,7 @@ namespace school
         const float &getExam() const { return _exam; }
         void setExam(float exam) { _exam = exam; }
 
-        const float getTotal() const { return gcore::approximate((_ca + _exam),0); }
+        const float getTotal() const { return gcore::approximate((_ca + _exam), 0); }
         const std::string getGrade() const;
         const float getGradePoint() const;
         const std::string getCode() const;
@@ -72,6 +72,8 @@ namespace school
         static bool create();
         static bool edit();
         static bool remove();
+        static void listReport();
+        static void detailReports();
 
         static bool add(StudentCourse studentCourse);
         static bool update(StudentCourse studentCourse);

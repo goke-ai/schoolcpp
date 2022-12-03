@@ -448,6 +448,14 @@ namespace school
         return b;
     }
 
+    void Person::listReport()
+    {
+    }
+
+    void Person::detailReports()
+    {
+    }
+
     bool Person::add(Person person)
     {
         auto &persons = getData();

@@ -569,8 +569,18 @@ namespace school
         }
         return b;
     }
+    
+    void Course::listReport()
+    {
+        
+    }
+    
+    void Course::detailReports()
+    {
+        
+    }
 
-    bool Course::resultSheetsRports()
+    bool Course::resultSheetReports()
     {
         auto &courses = getData();
 

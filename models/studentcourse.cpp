@@ -496,6 +496,14 @@ namespace school
         return b;
     }
 
+    void StudentCourse::listReport()
+    {
+    }
+
+    void StudentCourse::detailReports()
+    {
+    }
+
     bool StudentCourse::add(StudentCourse studentCourse)
     {
         auto &studentCourses = getData();

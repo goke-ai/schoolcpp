@@ -73,6 +73,8 @@ namespace school
         static bool create();
         static bool edit();
         static bool remove();
+        static void listReport();
+        static void detailReports();
 
         static bool add(Person person);
         static bool update(Person person);

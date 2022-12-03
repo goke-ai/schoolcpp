@@ -45,7 +45,7 @@ namespace school
         std::string toCsv();
         std::string toJson();
 
-        void detailsReport();
+        void detailReport();
         void transcriptReport();
         void openTranscript();
 
@@ -66,9 +66,8 @@ namespace school
         static bool edit();
         static bool remove();
         static void listReport();
-        static void detailsReports();
-        static bool transcriptsReports();
-        static void openTranscripts();
+        static void detailReports();
+        static bool transcriptReports();
 
         static bool add(Student student);
         static bool update(Student student);

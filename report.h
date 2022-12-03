@@ -11,6 +11,7 @@ public:
     Report(/* args */);
     ~Report();
 
+    static void open(std::string fileUrl);
     static const std::string &getStyle();
     // static const std::string &getHeader();
     // static const std::string &getBody();

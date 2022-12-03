@@ -114,7 +114,7 @@ namespace school
         return os.str();
     }
 
-    void Student::detailsReport()
+    void Student::detailReport()
     {
         std::ostringstream os;
 
@@ -527,8 +527,6 @@ namespace school
         {
             std::cout << v.toString();
         }
-
-        listReport();
     }
 
     bool Student::create()
@@ -738,20 +736,47 @@ namespace school
         }
         file << os.str();
         file.close();
+
+        std::string fileUrl = "reports/st/list.html";
+
+        Report::open(fileUrl);
     }
 
-    void Student::detailsReports()
+    void Student::detailReports()
     {
-        auto &students = getData();
+        list();
 
-        // get student
-        for (auto &&s : students)
+        // choose ID to edit
+        std::cout << "Enter the Student ID to create detail report: ";
+        char text[100];
+        std::cin.getline(text, 99);
+
+        int id = std::stoi(text);
+
+        auto &students = getData();
+        auto s = gquery::first(students, [&id](Student x)
+                               { return x.getId() == id; });
+
+        // dislay student to edit
+        std::cout << "\n"
+                  << s.toString();
+        // ask for confirmation
+        auto message = "Confirm creating detail report for Student ID:" + std::to_string(s.getId());
+        auto yesorno = gcore::Ux::confirm(message);
+        if (yesorno == 'N')
         {
-            s.detailsReport();
+            std::cout << "Detail report cancelled.\n";
+            return;
         }
+
+        s.detailReport();
+
+        std::string fileUrl{"reports/st/" + s.getStudentNo() + ".html"};
+
+        Report::open(fileUrl);
     }
 
-    bool Student::transcriptsReports()
+    bool Student::transcriptReports()
     {
         list();
 
@@ -780,47 +805,11 @@ namespace school
 
         s.transcriptReport();
 
-        if (system(NULL))
-        {
-            std::cout << "Command Processor is present";
+        std::string fileUrl{"reports/ts/" + s.getStudentNo() + ".html"};
 
-            // std::string originUrl{"file:///Users/goke/Library/CloudStorage/OneDrive-Personal/zs/schoolcpp/"};
-            std::string fileUrl{"reports/ts/" + s.getStudentNo() + ".html"};
-            std::string url{""};
-            int rcmd = 0;
-
-#if defined(__APPLE__)
-            url = "open " + fileUrl;
-#endif // __APPLE__
-#if defined(_WIN32)
-            url = "start " + fileUrl;
-#endif // _WIN32
-#if defined(__unix__)
-            url = "xdg-open " + fileUrl;
-#endif // __unix__
-
-            rcmd = system(url.c_str());
-            std::cout << rcmd;
-
-            //  url={"open -a \"Google Chrome\" " + fileUrl};
-            //  rcmd = system(url.c_str());
-            //  url={"open -a \"Firefox\" " + fileUrl};
-            //  rcmd = system(url.c_str());
-            url = {"open -a \"Edge\" " + fileUrl};
-            rcmd = system(url.c_str());
-
-            std::cout << rcmd;
-        }
-        else
-        {
-            std::cout << "Command processor is not present";
-        }
+        Report::open(fileUrl);
 
         return true;
-    }
-
-    void Student::openTranscripts()
-    {
     }
 
     bool Student::add(Student student)
@@ -843,10 +832,6 @@ namespace school
             }
 
             students.push_back(student);
-
-            //
-            student.detailsReport();
-
             //
             return true;
         }
@@ -861,10 +846,6 @@ namespace school
         {
             gquery::replace(students, student, [&student](Student x)
                             { return x.getId() == student.getId(); });
-
-            //
-            student.detailsReport();
-
             //
             return true;
         }
