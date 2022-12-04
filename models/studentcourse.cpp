@@ -6,6 +6,8 @@
 #include "query.h"
 #include "fakegen.h"
 #include "ux.h"
+#include "html.h"
+#include "../report.h"
 #include "student.h"
 #include "course.h"
 #include "studentcourse.h"
@@ -87,6 +89,39 @@ namespace school
         return c.getUnit();
     }
 
+    const std::string StudentCourse::getStudentName() const
+    {
+        auto &students = Student::getData();
+
+        auto s = gquery::first(students, [this](Student x)
+                               { return x.getId() == getStudentId(); });
+        return s.getStudentNo() + " | " + s.getPersonName();
+    }
+
+    const std::string StudentCourse::getCourseName() const
+    {
+        auto &courses = Course::getData();
+
+        auto c = gquery::first(courses, [this](Course x)
+                               { return x.getId() == getCourseId(); });
+        return c.getCode() + " | " + c.getTitle();
+    }
+
+    const std::string StudentCourse::getUrlName() const
+    {
+        auto &students = Student::getData();
+        auto s = gquery::first(students, [this](Student x)
+                               { return x.getId() == getStudentId(); });
+
+        auto &courses = Course::getData();
+        auto c = gquery::first(courses, [this](Course x)
+                               { return x.getId() == getCourseId(); });
+
+        auto text = s.getStudentNo() + "_" + c.getCode();
+
+        return gcore::validUrl(text);
+    }
+
     std::string StudentCourse::toString()
     {
         std::ostringstream os;
@@ -129,6 +164,77 @@ namespace school
         os << "}";
 
         return os.str();
+    }
+
+    std::string StudentCourse::detailReport()
+    {
+        std::ostringstream os;
+
+        os << Html::html({
+            Html::head({
+                Html::style({
+                    Report::getStyle(),
+                }),
+            }),
+
+            Html::body({
+                Html::div({
+                              Html::img({
+                                  "src='../../img/logo.png'",
+                                  "width='200px'",
+                              }),
+                              Html::tag("h1", "COVENANT UNIVERSITY"),
+                              Html::tag("h2", "CHEMICAL ENGINEERING DEPARTMENT"),
+                              Html::tag("h2", "STUDENT-COURSE DETAILS", {
+                                                                            "class='p-1'",
+                                                                        }),
+                              Html::hr(),
+                          },
+                          "class='m-1 p-1 text-center'"),
+
+                Html::div({
+                              Html::table({
+                                  Html::tr({
+                                      Html::th("ID"),
+                                      Html::td(std::to_string(getId())),
+                                  }),
+                                  Html::tr({
+                                      Html::th("StudentName"),
+                                      Html::td(getStudentName()),
+                                  }),
+                                  Html::tr({
+                                      Html::th("CourseName"),
+                                      Html::td(getCourseName()),
+                                  }),
+                                  Html::tr({
+                                      Html::th("CA"),
+                                      Html::td(std::to_string(getCA())),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Exam"),
+                                      Html::td(std::to_string(getExam())),
+                                  }),
+                              }),
+                          },
+                          "class='m-1 p-1'"),
+            }),
+        });
+
+        std::string path = "./reports/sc/" + this->getUrlName() + ".html";
+
+        std::ofstream file(path);
+
+        if (!file.is_open())
+        {
+            return NULL;
+        }
+
+        file << os.str();
+
+        file.close();
+
+        auto fileUrl = path.substr(2);
+        return fileUrl;
     }
 
     // static
@@ -498,10 +604,116 @@ namespace school
 
     void StudentCourse::listReport()
     {
+        auto &studentCourses = getData();
+
+        std::ostringstream os;
+
+        os << Html::html({
+            Html::head({
+                Html::style({Report::getStyle()}),
+            }),
+
+            Html::body({
+                Html::div({
+                              Html::img({
+                                  "src='../../img/logo.png'",
+                                  "width='200px'",
+                              }),
+                              Html::tag("h1", "COVENANT UNIVERSITY"),
+                              Html::tag("h2", "CHEMICAL ENGINEERING DEPARTMENT"),
+                              Html::tag("h2", "STUDENT-COURSE LIST", {
+                                                                         "class='p-1'",
+                                                                     }),
+                              Html::hr(),
+                          },
+                          "class='m-1 p-1 text-center'"),
+
+                Html::div({
+                              Html::table({Html::tr({
+                                               Html::th("SN"),
+                                               Html::th("Id"),
+                                               Html::th("StudentName"),
+                                               Html::th("CourseName"),
+                                               Html::th("CA"),
+                                               Html::th("Exam"),
+                                           }),
+
+                                           Html::forTag([&]()
+                                                        {
+                                                std::string rt{" "};
+                                                int n=0;
+
+                                                for (auto &&v : studentCourses)
+                                                {
+                                                    rt += Html::tr({
+                                                        Html::td([&n](){ return ++n; }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getId(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getStudentName(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getCourseName(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getCA(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getExam(); }, [](){ return ""; }),                                                                
+                                                    });
+                                                }
+                                                return rt; }),
+
+                                           Html::tr({
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                           })}),
+
+                          },
+                          "class='m-1 p-1'"),
+            }),
+        });
+
+        std::string path = "./reports/sc/list.html";
+        std::ofstream file(path);
+        if (!file.is_open())
+        {
+            return;
+        }
+        file << os.str();
+        file.close();
+
+        std::string fileUrl = "reports/sc/list.html";
+
+        Report::open(fileUrl);
     }
 
     void StudentCourse::detailReports()
     {
+        //
+        list();
+
+        // choose ID to edit
+        std::cout << "Enter the StudentCourse ID to create detail report: ";
+        char text[100];
+        std::cin.getline(text, 99);
+
+        int id = std::stoi(text);
+
+        auto &studentCourses = getData();
+        auto s = gquery::first(studentCourses, [&id](StudentCourse x)
+                               { return x.getId() == id; });
+
+        // dislay studentCourse to edit
+        std::cout << "\n"
+                  << s.toString();
+        // ask for confirmation
+        auto message = "Confirm creating detail report for StudentCourse ID:" + std::to_string(s.getId());
+        auto yesorno = gcore::Ux::confirm(message);
+        if (yesorno == 'N')
+        {
+            std::cout << "Detail report cancelled.\n";
+            return;
+        }
+
+        std::string fileUrl = s.detailReport();
+        Report::open(fileUrl);
     }
 
     bool StudentCourse::add(StudentCourse studentCourse)

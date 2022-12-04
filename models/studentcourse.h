@@ -50,10 +50,16 @@ namespace school
         const std::string getCode() const;
         const std::string getTitle() const;
         const float getUnit() const;
+        const std::string getStudentName() const;
+        const std::string getCourseName() const;
+        const std::string getUrlName() const;
+
 
         std::string toString();
         std::string toCsv();
         std::string toJson();
+
+        std::string detailReport();
 
         // statics
         static std::vector<StudentCourse> &getData();

@@ -47,10 +47,13 @@ namespace school
         const float &getExam() const { return _exam; }
         void setExam(float exam) { _exam = exam; }
 
+        const std::string getUrlName() const;
+
         std::string toString();
         std::string toCsv();
         std::string toJson();
 
+        std::string detailReport();
         void resultSheetReport();
 
         // statics

@@ -73,6 +73,11 @@ namespace school
         return os.str();
     }
 
+    const std::string Student::getUrlName() const
+    {
+        return getStudentNo();
+    }
+
     std::string Student::toString()
     {
         std::ostringstream os;
@@ -114,7 +119,7 @@ namespace school
         return os.str();
     }
 
-    void Student::detailReport()
+    std::string Student::detailReport()
     {
         std::ostringstream os;
 
@@ -176,18 +181,21 @@ namespace school
             }),
         });
 
-        std::string path = "./reports/st/" + this->getStudentNo() + ".html";
+        std::string path = "./reports/st/" + this->getUrlName() + ".html";
 
         std::ofstream file(path);
 
         if (!file.is_open())
         {
-            return;
+            return NULL;
         }
 
         file << os.str();
 
         file.close();
+
+        auto fileUrl = path.substr(2);
+        return fileUrl;
     }
 
     void Student::transcriptReport()
@@ -744,6 +752,7 @@ namespace school
 
     void Student::detailReports()
     {
+        //
         list();
 
         // choose ID to edit
@@ -769,10 +778,8 @@ namespace school
             return;
         }
 
-        s.detailReport();
-
-        std::string fileUrl{"reports/st/" + s.getStudentNo() + ".html"};
-
+        auto fileUrl = s.detailReport();
+        
         Report::open(fileUrl);
     }
 
