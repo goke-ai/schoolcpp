@@ -53,9 +53,14 @@ namespace school
         const gcore::Gender &getGender() const { return _gender; }
         void setGender(gcore::Gender gender) { _gender = gender; }
 
+        const std::string getUrlName() const;
+        
+
         std::string toString();
         std::string toCsv();
         std::string toJson();
+
+        std::string detailReport();
 
         // statics
         static std::vector<Person> &getData();

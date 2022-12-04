@@ -6,6 +6,8 @@
 #include "query.h"
 #include "fakegen.h"
 #include "ux.h"
+#include "html.h"
+#include "../report.h"
 #include "person.h"
 
 namespace school
@@ -37,6 +39,12 @@ namespace school
 
     Person::~Person()
     {
+    }
+
+    const std::string Person::getUrlName() const
+    {
+        auto text = getEmail();
+        return gcore::validUrl(text);
     }
 
     std::string Person::toString()
@@ -84,6 +92,81 @@ namespace school
         os << "}";
 
         return os.str();
+    }
+
+    std::string Person::detailReport()
+    {
+        std::ostringstream os;
+
+        os << Html::html({
+            Html::head({
+                Html::style({
+                    Report::getStyle(),
+                }),
+            }),
+
+            Html::body({
+                Html::div({
+                              Html::img({
+                                  "src='../../img/logo.png'",
+                                  "width='200px'",
+                              }),
+                              Html::tag("h1", "COVENANT UNIVERSITY"),
+                              Html::tag("h2", "CHEMICAL ENGINEERING DEPARTMENT"),
+                              Html::tag("h2", "PERSON DETAILS", {
+                                                                    "class='p-1'",
+                                                                }),
+                              Html::hr(),
+                          },
+                          "class='m-1 p-1 text-center'"),
+
+                Html::div({
+                              Html::table({
+                                  Html::tr({
+                                      Html::th("ID"),
+                                      Html::td(std::to_string(getId())),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Surname"),
+                                      Html::td(getSurname()),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Firstname"),
+                                      Html::td(getFirstname()),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Email"),
+                                      Html::td(getEmail()),
+                                  }),
+                                  Html::tr({
+                                      Html::th("BirthDate"),
+                                      Html::td(getBirthDate()),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Gender"),
+                                      Html::td(gcore::genderToString(getGender())),
+                                  }),
+                              }),
+                          },
+                          "class='m-1 p-1'"),
+            }),
+        });
+
+        std::string path = "./reports/pe/" + this->getUrlName() + ".html";
+
+        std::ofstream file(path);
+
+        if (!file.is_open())
+        {
+            return NULL;
+        }
+
+        file << os.str();
+
+        file.close();
+
+        auto fileUrl = path.substr(2);
+        return fileUrl;
     }
 
     // static
@@ -450,10 +533,119 @@ namespace school
 
     void Person::listReport()
     {
+        auto &persons = getData();
+
+        std::ostringstream os;
+
+        os << Html::html({
+            Html::head({
+                Html::style({Report::getStyle()}),
+            }),
+
+            Html::body({
+                Html::div({
+                              Html::img({
+                                  "src='../../img/logo.png'",
+                                  "width='200px'",
+                              }),
+                              Html::tag("h1", "COVENANT UNIVERSITY"),
+                              Html::tag("h2", "CHEMICAL ENGINEERING DEPARTMENT"),
+                              Html::tag("h2", "PERSON LIST", {
+                                                                 "class='p-1'",
+                                                             }),
+                              Html::hr(),
+                          },
+                          "class='m-1 p-1 text-center'"),
+
+                Html::div({
+                              Html::table({Html::tr({
+                                               Html::th("SN"),
+                                               Html::th("Id"),
+                                               Html::th("Surname"),
+                                               Html::th("Firstname"),
+                                               Html::th("Email"),
+                                               Html::th("BirthDate"),
+                                               Html::th("Gender"),
+                                           }),
+
+                                           Html::forTag([&]()
+                                                        {
+                                                std::string rt{" "};
+                                                int n=0;
+
+                                                for (auto &&v : persons)
+                                                {
+                                                    rt += Html::tr({
+                                                        Html::td([&n](){ return ++n; }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getId(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getSurname(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getFirstname(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getEmail(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getBirthDate(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getGender(); }, [](){ return ""; }),                                                                
+                                                    });
+                                                }
+                                                return rt; }),
+
+                                           Html::tr({
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                           })}),
+
+                          },
+                          "class='m-1 p-1'"),
+            }),
+        });
+
+        std::string path = "./reports/pe/list.html";
+        std::ofstream file(path);
+        if (!file.is_open())
+        {
+            return;
+        }
+        file << os.str();
+        file.close();
+
+        std::string fileUrl = "reports/pe/list.html";
+
+        Report::open(fileUrl);
     }
 
     void Person::detailReports()
     {
+        //
+        list();
+
+        // choose ID to edit
+        std::cout << "Enter the Person ID to create detail report: ";
+        char text[100];
+        std::cin.getline(text, 99);
+
+        int id = std::stoi(text);
+
+        auto &persons = getData();
+        auto s = gquery::first(persons, [&id](Person x)
+                               { return x.getId() == id; });
+
+        // dislay person to edit
+        std::cout << "\n"
+                  << s.toString();
+        // ask for confirmation
+        auto message = "Confirm creating detail report for Person ID:" + std::to_string(s.getId());
+        auto yesorno = gcore::Ux::confirm(message);
+        if (yesorno == 'N')
+        {
+            std::cout << "Detail report cancelled.\n";
+            return;
+        }
+
+        std::string fileUrl = s.detailReport();
+        Report::open(fileUrl);
     }
 
     bool Person::add(Person person)

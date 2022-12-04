@@ -86,6 +86,86 @@ namespace school
         return os.str();
     }
 
+    const std::string Course::getUrlName() const
+    {
+        return getCode();
+    }
+
+    std::string Course::detailReport()
+    {
+        std::ostringstream os;
+
+        os << Html::html({
+            Html::head({
+                Html::style({
+                    Report::getStyle(),
+                }),
+            }),
+
+            Html::body({
+                Html::div({
+                              Html::img({
+                                  "src='../../img/logo.png'",
+                                  "width='200px'",
+                              }),
+                              Html::tag("h1", "COVENANT UNIVERSITY"),
+                              Html::tag("h2", "CHEMICAL ENGINEERING DEPARTMENT"),
+                              Html::tag("h2", "COURSE DETAILS", {
+                                                                    "class='p-1'",
+                                                                }),
+                              Html::hr(),
+                          },
+                          "class='m-1 p-1 text-center'"),
+
+                Html::div({
+                              Html::table({
+                                  Html::tr({
+                                      Html::th("ID"),
+                                      Html::td(std::to_string(getId())),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Code"),
+                                      Html::td(getCode()),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Title"),
+                                      Html::td(getTitle()),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Unit"),
+                                      Html::td(std::to_string(getUnit())),
+                                  }),
+                                  Html::tr({
+                                      Html::th("CA"),
+                                      Html::td(std::to_string(getCA())),
+                                  }),
+                                  Html::tr({
+                                      Html::th("Exam"),
+                                      Html::td(std::to_string(getExam())),
+                                  }),
+                              }),
+                          },
+                          "class='m-1 p-1'"),
+            }),
+        });
+
+        std::string path = "./reports/co/" + this->getUrlName() + ".html";
+
+        std::ofstream file(path);
+
+        if (!file.is_open())
+        {
+            return NULL;
+        }
+
+        file << os.str();
+
+        file.close();
+
+        auto fileUrl = path.substr(2);
+        return fileUrl;
+    }
+
     void Course::resultSheetReport()
     {
         auto &studentCourses = StudentCourse::getData();
@@ -125,8 +205,8 @@ namespace school
                             Html::tag("h1", "COVENANT UNIVERSITY"),
                             Html::tag("h2", "CHEMICAL ENGINEERING DEPARTMENT"),
                             Html::tag("h2", "COURSE RESULT SHEET", {
-                                                                      "class='p-1'",
-                                                                  }),
+                                                                       "class='p-1'",
+                                                                   }),
                             Html::hr(),
                         },
                         "class='m-1 p-1 text-center'");
@@ -569,15 +649,123 @@ namespace school
         }
         return b;
     }
-    
+
     void Course::listReport()
     {
-        
+        auto &courses = getData();
+
+        std::ostringstream os;
+
+        os << Html::html({
+            Html::head({
+                Html::style({Report::getStyle()}),
+            }),
+
+            Html::body({
+                Html::div({
+                              Html::img({
+                                  "src='../../img/logo.png'",
+                                  "width='200px'",
+                              }),
+                              Html::tag("h1", "COVENANT UNIVERSITY"),
+                              Html::tag("h2", "CHEMICAL ENGINEERING DEPARTMENT"),
+                              Html::tag("h2", "COURSE LIST", {
+                                                                 "class='p-1'",
+                                                             }),
+                              Html::hr(),
+                          },
+                          "class='m-1 p-1 text-center'"),
+
+                Html::div({
+                              Html::table({Html::tr({
+                                               Html::th("SN"),
+                                               Html::th("Id"),
+                                               Html::th("Code"),
+                                               Html::th("Title"),
+                                               Html::th("Unit"),
+                                               Html::th("CA"),
+                                               Html::th("Exam"),
+                                           }),
+
+                                           Html::forTag([&]()
+                                                        {
+                                                std::string rt{" "};
+                                                int n=0;
+
+                                                for (auto &&v : courses)
+                                                {
+                                                    rt += Html::tr({
+                                                        Html::td([&n](){ return ++n; }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getId(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getCode(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getTitle(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getUnit(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getCA(); }, [](){ return ""; }),                                                                
+                                                        Html::td([&v](){ return v.getExam(); }, [](){ return ""; }),                                                                
+                                                    });
+                                                }
+                                                return rt; }),
+
+                                           Html::tr({
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                               Html::th(),
+                                           })}),
+
+                          },
+                          "class='m-1 p-1'"),
+            }),
+        });
+
+        std::string path = "./reports/co/list.html";
+        std::ofstream file(path);
+        if (!file.is_open())
+        {
+            return;
+        }
+        file << os.str();
+        file.close();
+
+        std::string fileUrl = "reports/co/list.html";
+
+        Report::open(fileUrl);
     }
-    
+
     void Course::detailReports()
     {
-        
+        //
+        list();
+
+        // choose ID to edit
+        std::cout << "Enter the Course ID to create detail report: ";
+        char text[100];
+        std::cin.getline(text, 99);
+
+        int id = std::stoi(text);
+
+        auto &courses = getData();
+        auto s = gquery::first(courses, [&id](Course x)
+                               { return x.getId() == id; });
+
+        // dislay course to edit
+        std::cout << "\n"
+                  << s.toString();
+        // ask for confirmation
+        auto message = "Confirm creating detail report for Course ID:" + std::to_string(s.getId());
+        auto yesorno = gcore::Ux::confirm(message);
+        if (yesorno == 'N')
+        {
+            std::cout << "Detail report cancelled.\n";
+            return;
+        }
+
+        auto fileUrl = s.detailReport();
+
+        Report::open(fileUrl);
     }
 
     bool Course::resultSheetReports()

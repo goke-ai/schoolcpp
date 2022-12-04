@@ -40,12 +40,13 @@ namespace school
         const std::string getPersonName() const;
         const std::string getGender() const;
         const std::string getBirthDate() const;
+        const std::string getUrlName() const;
 
         std::string toString();
         std::string toCsv();
         std::string toJson();
 
-        void detailReport();
+        std::string detailReport();
         void transcriptReport();
         void openTranscript();
 
