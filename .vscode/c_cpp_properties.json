@@ -4,7 +4,7 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "../core/cpp/CPPConsoleApp/include"
+                "../core/cpp/CPPConsoleApp/include/**"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -19,12 +19,12 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "../core/cpp/CPPConsoleApp/include"
+                "../core/cpp/CPPConsoleApp/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu17",
-            "cppStandard": "gnu++17",
+            "cppStandard": "gnu++20",
             "intelliSenseMode": "linux-gcc-x64"
         }
     ],

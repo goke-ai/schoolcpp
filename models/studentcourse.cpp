@@ -104,7 +104,7 @@ namespace school
 
         auto c = gquery::first(courses, [this](Course x)
                                { return x.getId() == getCourseId(); });
-        return c.getCode() + " | " + c.getTitle();
+        return c.getCode() + " | " + c.getTitle() + " | " + gcore::toWidth(c.getUnit(), 1);
     }
 
     const std::string StudentCourse::getUrlName() const
@@ -208,11 +208,11 @@ namespace school
                                   }),
                                   Html::tr({
                                       Html::th("CA"),
-                                      Html::td(std::to_string(getCA())),
+                                      Html::td(gcore::toWidth(getCA(), 2)),
                                   }),
                                   Html::tr({
                                       Html::th("Exam"),
-                                      Html::td(std::to_string(getExam())),
+                                      Html::td(gcore::toWidth(getExam(), 2)),
                                   }),
                               }),
                           },
@@ -220,7 +220,7 @@ namespace school
             }),
         });
 
-        std::string path = "./reports/sc/" + this->getUrlName() + ".html";
+        std::string path = "reports/sc/" + this->getUrlName() + ".html";
 
         std::ofstream file(path);
 
@@ -233,7 +233,7 @@ namespace school
 
         file.close();
 
-        auto fileUrl = path.substr(2);
+        auto fileUrl = path; //.substr(2);
         return fileUrl;
     }
 
@@ -342,6 +342,7 @@ namespace school
     StudentCourse StudentCourse::input(int &maxID)
     {
         char text[100];
+        std::string emp{""};
 
         int id = 0;
         // std::cout << "Enter ID (0, " << ++maxID << " or any number): ";
@@ -496,6 +497,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the StudentCourse ID to Edit: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -523,28 +525,28 @@ namespace school
 
         std::cout << "Edit StudentId [" << p.getStudentId() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setStudentId(std::stoi(text));
         }
 
         std::cout << "Edit courseId [" << p.getCourseId() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setCourseId(std::stoi(text));
         }
 
         std::cout << "Edit ca [" << p.getCA() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setCA(std::stof(text));
         }
 
         std::cout << "Edit exam [" << p.getExam() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setExam(std::stof(text));
         }
@@ -569,6 +571,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the StudentCourse ID to Delete: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -605,6 +608,9 @@ namespace school
     void StudentCourse::listReport()
     {
         auto &studentCourses = getData();
+
+        auto oStudentCourses = gquery::orderBy(studentCourses, [](StudentCourse x, StudentCourse y)
+                                               { return (x.getStudentName() < y.getStudentName()); });
 
         std::ostringstream os;
 
@@ -643,7 +649,7 @@ namespace school
                                                 std::string rt{" "};
                                                 int n=0;
 
-                                                for (auto &&v : studentCourses)
+                                                for (auto &&v : oStudentCourses)
                                                 {
                                                     rt += Html::tr({
                                                         Html::td([&n](){ return ++n; }, [](){ return ""; }),                                                                
@@ -670,7 +676,7 @@ namespace school
             }),
         });
 
-        std::string path = "./reports/sc/list.html";
+        std::string path = "reports/sc/list.html";
         std::ofstream file(path);
         if (!file.is_open())
         {
@@ -692,6 +698,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the StudentCourse ID to create detail report: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);

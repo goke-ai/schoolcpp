@@ -54,7 +54,7 @@ namespace school
         std::string toJson();
 
         std::string detailReport();
-        void resultSheetReport();
+         std::string resultSheetReport();
 
         // statics
         static std::vector<Course> &getData();

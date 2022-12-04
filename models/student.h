@@ -47,7 +47,7 @@ namespace school
         std::string toJson();
 
         std::string detailReport();
-        void transcriptReport();
+        std::string transcriptReport();
         void openTranscript();
 
         // statics

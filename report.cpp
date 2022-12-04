@@ -18,7 +18,7 @@ void Report::open(std::string fileUrl)
 {
     if (system(NULL))
     {
-        std::cout << "Command Processor is present";
+        std::cout << "Command Processor is present\n";
 
         // std::string originUrl{"file:///Users/goke/Library/CloudStorage/OneDrive-Personal/zs/schoolcpp/"};
         std::string url{""};
@@ -26,29 +26,41 @@ void Report::open(std::string fileUrl)
 
 #if defined(__APPLE__)
         url = "open " + fileUrl;
-#endif // __APPLE__
-#if defined(_WIN32)
-        url = "start " + fileUrl;
-#endif // _WIN32
-#if defined(__unix__)
-        url = "xdg-open " + fileUrl;
-#endif // __unix__
-
         rcmd = system(url.c_str());
-        std::cout << rcmd;
 
         //  url={"open -a \"Google Chrome\" " + fileUrl};
         //  rcmd = system(url.c_str());
         //  url={"open -a \"Firefox\" " + fileUrl};
         //  rcmd = system(url.c_str());
-        url = {"open -a \"Edge\" " + fileUrl};
-        rcmd = system(url.c_str());
+        // url = {"open -a \"Edge\" " + fileUrl};
+        // rcmd = system(url.c_str());
 
-        std::cout << rcmd;
+#endif // __APPLE__
+
+#if defined(_WIN32)
+        url = "start " + fileUrl;
+        rcmd = system(url.c_str());
+#endif // _WIN32
+
+#if defined(__unix__)
+        url = "xdg-open " + fileUrl;
+        rcmd = system(url.c_str());
+        if (rcmd > 0)
+        {
+            url = "wslview " + fileUrl;
+            rcmd = system(url.c_str());
+        }
+
+#endif // __unix__
+
+        // rcmd = system(url.c_str());
+        // std::cout << rcmd;
+
+        std::cout << rcmd << std::endl;
     }
     else
     {
-        std::cout << "Command processor is not present";
+        std::cout << "Command processor is not present\n";
     }
 }
 

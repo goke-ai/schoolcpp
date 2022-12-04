@@ -5,7 +5,6 @@
                 "executable": "cmd.exe",
                 "args": [
                     "/C",
-                    // The path to VsDevCmd.bat depends on the version of Visual Studio you have installed.
                     "\"C:/Program Files/Microsoft Visual Studio/2022/Enterprise/Common7/Tools/VsDevCmd.bat\"",
                     "&&"
                 ]
@@ -20,21 +19,23 @@
             "args": [
                 "-fcolor-diagnostics",
                 "-fansi-escape-codes",
-                "-std=c++20", // "-std=c++17",
+                "-std=c++20",
                 "-stdlib=libc++",
-                //    "-v",
+
                 "-I",
                 "/Users/goke/Library/CloudStorage/OneDrive-Personal/zs/core/cpp/CPPConsoleApp/include",
+
                 "-g",
-                "/Users/goke/Library/CloudStorage/OneDrive-Personal/zs/core/cpp/CPPConsoleApp/src/*.cpp",
-                // $(find [RootFolderName] -type f -iregex ".*\\.cpp")
+                
+                "/Users/goke/Library/CloudStorage/OneDrive-Personal/zs/core/cpp/CPPConsoleApp/src/**.cpp",
+
                 "$(find",
-                ".", // "${workspaceFolder}",
+                ".",
                 "-type",
                 "f",
                 "-iregex",
                 "'.*\\.cpp')",
-                // "${workspaceFolder}/*.cpp",
+                
                 "-o",
                 "${workspaceFolder}/bin/debug/osx/schoolcpp"
             ],
@@ -46,7 +47,7 @@
             ],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "detail": "compiler: /usr/bin/clang++"
         },
@@ -56,16 +57,22 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
-                "-std=c++20", // "-std=c++17",
+                "-std=c++20",
+
+                "-I",
+                "/mnt/c/Users/gokel/OneDrive/zs/core/cpp/CPPConsoleApp/include",
+
                 "-g",
-                // $(find [RootFolderName] -type f -iregex ".*\\.cpp")
+
+                "/mnt/c/Users/gokel/OneDrive/zs/core/cpp/CPPConsoleApp/src/**.cpp",
+
                 "$(find",
-                ".", // "${workspaceFolder}",
+                ".",
                 "-type",
                 "f",
                 "-iregex",
                 "'.*\\.cpp')",
-                // "${workspaceFolder}/*.cpp",
+
                 "-o",
                 "${workspaceFolder}/bin/debug/linux/schoolcpp"
             ],
@@ -75,7 +82,10 @@
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "detail": "compiler: /usr/bin/g++"
         },
         {
@@ -83,27 +93,11 @@
             "label": "C/C++: cl.exe build debug",
             "command": "cl.exe",
             "args": [
-                // "/std:c++17",
-                // // "/W4",
-                "/Zi", // /debug
+                "/Zi",
                 "/EHsc",
-                // // "/nologo",
-                // "/D_WIN32_WINNT=0x0601",
-                // "/DCROW_ENABLE_DEBUG",
-                // // "/D_BOOST_DATE_TIME_DYN_LINK",
-                // // "/D_BOOST_ALL_NO_LIB=1",
-                // // "/D_BOOST_DATE_TIME_NO_LIB=1",
-                // "/DCORE_DLL",
-                // "/I",
-                // "C:\\sdk\\boost_1_77_0",
-                // // "C:\\sdk\\vcpkg\\installed\\x86-windows\\include",
                 "${workspaceFolder}\\*.cpp",
-                // "${workspaceFolder}\\src\\server\\sqlite3.c",
-                "/Fe:", // /out
-                "${workspaceFolder}\\bin\\debug\\win\\schoolcpp.exe",
-                // "/link",
-                // "/LIBPATH:c:\\sdk\\boost_1_77_0\\stage\\lib"
-                // // "/LIBPATH:C:\\sdk\\vcpkg\\installed\\x86-windows\\lib"
+                "/Fe:",
+                "${workspaceFolder}\\bin\\debug\\win\\schoolcpp.exe"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -112,8 +106,7 @@
                 "$msCompile"
             ],
             "group": {
-                "kind": "build",
-                // "isDefault": true
+                "kind": "build"
             },
             "detail": "compiler: cl.exe"
         }

@@ -149,7 +149,7 @@ namespace school
             }),
         });
 
-        std::string path = "./reports/co/" + this->getUrlName() + ".html";
+        std::string path = "reports/co/" + this->getUrlName() + ".html";
 
         std::ofstream file(path);
 
@@ -162,11 +162,11 @@ namespace school
 
         file.close();
 
-        auto fileUrl = path.substr(2);
+        auto fileUrl = path; //.substr(2);
         return fileUrl;
     }
 
-    void Course::resultSheetReport()
+    std::string Course::resultSheetReport()
     {
         auto &studentCourses = StudentCourse::getData();
         auto &students = Student::getData();
@@ -317,18 +317,20 @@ namespace school
            << Html::bodyClose()
            << Html::htmlClose();
 
-        std::string path = "./reports/rs/" + this->getCode() + ".html";
+        std::string path = "reports/rs/" + this->getCode() + ".html";
 
         std::ofstream file(path);
 
         if (!file.is_open())
         {
-            return;
+            return NULL;
         }
 
         file << os.str();
 
         file.close();
+
+        return path;
     }
 
     // static
@@ -437,6 +439,7 @@ namespace school
     Course Course::input(int &maxID)
     {
         char text[100];
+        std::string emp{""};
 
         int id = 0;
         // std::cout << "Enter ID (0, " << ++maxID << " or any number): ";
@@ -537,6 +540,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the Course ID to Edit: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -564,35 +568,35 @@ namespace school
 
         std::cout << "Edit Code [" << p.getCode() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setCode(text);
         }
 
         std::cout << "Edit title [" << p.getTitle() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setTitle(text);
         }
 
         std::cout << "Edit unit [" << p.getUnit() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setUnit(std::stof(text));
         }
 
         std::cout << "Edit ca [" << p.getCA() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setCA(std::stof(text));
         }
 
         std::cout << "Edit exam [" << p.getExam() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setExam(std::stof(text));
         }
@@ -617,6 +621,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the Course ID to Delete: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -653,6 +658,10 @@ namespace school
     void Course::listReport()
     {
         auto &courses = getData();
+
+        auto oCourses = gquery::orderBy(courses, [](Course x, Course y)
+                                        { return (x.getCode() < y.getCode()); });
+
 
         std::ostringstream os;
 
@@ -692,7 +701,7 @@ namespace school
                                                 std::string rt{" "};
                                                 int n=0;
 
-                                                for (auto &&v : courses)
+                                                for (auto &&v : oCourses)
                                                 {
                                                     rt += Html::tr({
                                                         Html::td([&n](){ return ++n; }, [](){ return ""; }),                                                                
@@ -721,7 +730,7 @@ namespace school
             }),
         });
 
-        std::string path = "./reports/co/list.html";
+        std::string path = "reports/co/list.html";
         std::ofstream file(path);
         if (!file.is_open())
         {
@@ -743,6 +752,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the Course ID to create detail report: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -770,12 +780,35 @@ namespace school
 
     bool Course::resultSheetReports()
     {
-        auto &courses = getData();
+        list();
 
-        for (auto &&v : courses)
+        // choose ID to edit
+        std::cout << "Enter the Student ID to create transcript: ";
+        char text[100];
+        std::string emp{""};
+        std::cin.getline(text, 99);
+
+        int id = std::stoi(text);
+
+        auto &courses = getData();
+        auto c = gquery::first(courses, [&id](Course x)
+                               { return x.getId() == id; });
+
+        // dislay student to edit
+        std::cout << "\n"
+                  << c.toString();
+        // ask for confirmation
+        auto message = "Confirm creating result-sheet for Course ID:" + std::to_string(c.getId());
+        auto yesorno = gcore::Ux::confirm(message);
+        if (yesorno == 'N')
         {
-            v.resultSheetReport();
+            std::cout << "Result-Sheet cancelled.\n";
+            return false;
         }
+
+        std::string fileUrl = c.resultSheetReport();
+
+        Report::open(fileUrl);
 
         return true;
     }

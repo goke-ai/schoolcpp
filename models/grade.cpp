@@ -198,7 +198,7 @@ namespace school
 
     Grade Grade::input(int &maxID)
     {
-        char text[100];
+        char text[100]; std::string emp{""};
 
         int id = 0;
         // std::cout << "Enter ID (0, " << ++maxID << " or any number): ";
@@ -303,7 +303,7 @@ namespace school
 
         // choose ID to edit
         std::cout << "Enter the Grade ID to Edit: ";
-        char text[100];
+        char text[100]; std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -331,35 +331,35 @@ namespace school
 
         std::cout << "Edit Name [" << p.getName() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setName(text);
         }
 
         std::cout << "Edit sytemType [" << p.getSytemType() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setSytemType(std::stoi(text));
         }
 
         std::cout << "Edit beginScore [" << p.getBeginScore() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setBeginScore(std::stof(text));
         }
 
         std::cout << "Edit nextScore [" << p.getNextScore() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setNextScore(std::stof(text));
         }
 
         std::cout << "Edit point [" << p.getPoint() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setPoint(std::stof(text));
         }
@@ -383,7 +383,7 @@ namespace school
 
         // choose ID to edit
         std::cout << "Enter the Grade ID to Delete: ";
-        char text[100];
+        char text[100]; std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);

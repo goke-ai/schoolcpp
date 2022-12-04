@@ -76,7 +76,19 @@
 			"regex": "cpp",
 			"stack": "cpp",
 			"iterator": "cpp",
-			"thread": "cpp"
+			"thread": "cpp",
+			"bit": "cpp",
+			"*.tcc": "cpp",
+			"codecvt": "cpp",
+			"map": "cpp",
+			"functional": "cpp",
+			"memory_resource": "cpp",
+			"numeric": "cpp",
+			"random": "cpp",
+			"utility": "cpp",
+			"numbers": "cpp",
+			"semaphore": "cpp",
+			"stop_token": "cpp"
 		},
 		"liveServer.settings.multiRootWorkspaceName": "schoolcpp"
 	},

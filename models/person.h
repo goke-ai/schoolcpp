@@ -59,7 +59,6 @@ namespace school
         std::string toString();
         std::string toCsv();
         std::string toJson();
-
         std::string detailReport();
 
         // statics
@@ -67,7 +66,6 @@ namespace school
 
         static bool hasData();
         static bool isExisting(Person person);
-
         static void load();
         static void write();
         static void clean();
@@ -84,5 +82,7 @@ namespace school
         static bool add(Person person);
         static bool update(Person person);
         static bool deletee(int id);
+
     };
+
 } // namespace school

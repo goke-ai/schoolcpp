@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 #include "gstring.h"
-#include "utilities.h"
+// #include "utilities.h"
 #include "query.h"
 #include "fakegen.h"
 #include "ux.h"
@@ -152,7 +153,23 @@ namespace school
             }),
         });
 
-        std::string path = "./reports/pe/" + this->getUrlName() + ".html";
+        // auto p = std::filesystem::current_path();
+
+        // std::cout << "The current path " << p << " decomposes into:\n"
+        //           << "root-path " << p.root_path() << '\n'
+        //           << "filename " << p.filename() << '\n'
+        //           << "parent_path " << p.parent_path() << '\n'
+        //           << "relative path " << p.relative_path() << '\n';
+
+        std::string path = "reports/pe/" + this->getUrlName() + ".html";
+        // // sudo apt-get install --reinstall xdg-utils
+        // p = path;
+
+        // std::cout << "The current path " << p << " decomposes into:\n"
+        //           << "root-path " << p.root_path() << '\n'
+        //           << "filename " << p.filename() << '\n'
+        //           << "parent_path " << p.parent_path() << '\n'
+        //           << "relative path " << p.relative_path() << '\n';
 
         std::ofstream file(path);
 
@@ -165,12 +182,11 @@ namespace school
 
         file.close();
 
-        auto fileUrl = path.substr(2);
+        auto fileUrl = path; //.substr(2);
         return fileUrl;
     }
 
     // static
-
     std::vector<Person> Person::_data;
     std::string Person::_path = "./data/person.sch";
 
@@ -277,6 +293,7 @@ namespace school
     Person Person::input(int &maxID)
     {
         char text[100];
+        std::string emp{""};
 
         int id = 0;
         // std::cout << "Enter ID (0, " << ++maxID << " or any number): ";
@@ -404,6 +421,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the Person ID to Edit: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -431,28 +449,28 @@ namespace school
 
         std::cout << "Edit Surname [" << p.getSurname() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setSurname(text);
         }
 
         std::cout << "Edit firstname [" << p.getFirstname() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setFirstname(text);
         }
 
         std::cout << "Edit email [" << p.getEmail() << "]: ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setEmail(text);
         }
 
         std::cout << "Edit birthDate [" << p.getBirthDate() << "] (YYYY-MM-DD): ";
         std::cin.getline(text, 99);
-        if (std::strcmp(text, "") != 0)
+        if (emp.compare(text) != 0)
         {
             p.setBirthDate(text);
         }
@@ -498,6 +516,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the Person ID to Delete: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -534,6 +553,8 @@ namespace school
     void Person::listReport()
     {
         auto &persons = getData();
+        auto oPersons = gquery::orderBy(persons, [](Person x, Person y)
+                                        { return (x.getSurname() < y.getSurname()); });
 
         std::ostringstream os;
 
@@ -570,22 +591,22 @@ namespace school
 
                                            Html::forTag([&]()
                                                         {
-                                                std::string rt{" "};
-                                                int n=0;
+                                                    std::string rt{" "};
+                                                    int n=0;
 
-                                                for (auto &&v : persons)
-                                                {
-                                                    rt += Html::tr({
-                                                        Html::td([&n](){ return ++n; }, [](){ return ""; }),                                                                
-                                                        Html::td([&v](){ return v.getId(); }, [](){ return ""; }),                                                                
-                                                        Html::td([&v](){ return v.getSurname(); }, [](){ return ""; }),                                                                
-                                                        Html::td([&v](){ return v.getFirstname(); }, [](){ return ""; }),                                                                
-                                                        Html::td([&v](){ return v.getEmail(); }, [](){ return ""; }),                                                                
-                                                        Html::td([&v](){ return v.getBirthDate(); }, [](){ return ""; }),                                                                
-                                                        Html::td([&v](){ return v.getGender(); }, [](){ return ""; }),                                                                
-                                                    });
-                                                }
-                                                return rt; }),
+                                                    for (auto &&v : oPersons)
+                                                    {
+                                                        rt += Html::tr({
+                                                            Html::td([&n](){ return ++n; }, [](){ return ""; }),
+                                                            Html::td([&v](){ return v.getId(); }, [](){ return ""; }),
+                                                            Html::td([&v](){ return v.getSurname(); }, [](){ return ""; }),
+                                                            Html::td([&v](){ return v.getFirstname(); }, [](){ return ""; }),
+                                                            Html::td([&v](){ return v.getEmail(); }, [](){ return ""; }),
+                                                            Html::td([&v](){ return v.getBirthDate(); }, [](){ return ""; }),
+                                                            Html::td([&v](){ return v.getGender(); }, [](){ return ""; }),
+                                                        });
+                                                    }
+                                                    return rt; }),
 
                                            Html::tr({
                                                Html::th(),
@@ -602,7 +623,7 @@ namespace school
             }),
         });
 
-        std::string path = "./reports/pe/list.html";
+        std::string path = "reports/pe/list.html";
         std::ofstream file(path);
         if (!file.is_open())
         {
@@ -624,6 +645,7 @@ namespace school
         // choose ID to edit
         std::cout << "Enter the Person ID to create detail report: ";
         char text[100];
+        std::string emp{""};
         std::cin.getline(text, 99);
 
         int id = std::stoi(text);
@@ -672,7 +694,6 @@ namespace school
         }
         return false;
     }
-
     bool Person::update(Person person)
     {
         auto &persons = getData();

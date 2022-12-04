@@ -7,6 +7,7 @@ char menu();
 void load();
 void save();
 void clean();
+void listReports();
 
 int main(int argc, char const *argv[])
 {
@@ -210,7 +211,7 @@ int main(int argc, char const *argv[])
         case 'v':
         {
             cout << "start list reports...\n";
-            Student::listReport();
+            listReports();
             cout << "...list finished\n";
         }
         break;
@@ -251,10 +252,10 @@ int main(int argc, char const *argv[])
 char menu()
 {
     cout << endl;
-    cout << "Enter p, l, g, 1, 5, d to add, list|generate|edit|delete|details Person: \n";
-    cout << "Enter u, m, h, 2, 6, e to add, list|generate|edit|delete|details Student: \n";
-    cout << "Enter c, n, i, 3, 7, f to add, list|generate|edit|delete|details Course: \n";
-    cout << "Enter t, r, j, 4, 8, k to add, list|generate|edit|delete|details StudentCourse: \n";
+    cout << "Enter p, l, g, 1, 5, d to add|list|generate|edit|delete|details Person: \n";
+    cout << "Enter u, m, h, 2, 6, e to add|list|generate|edit|delete|details Student: \n";
+    cout << "Enter c, n, i, 3, 7, f to add|list|generate|edit|delete|details Course: \n";
+    cout << "Enter t, r, j, 4, 8, k to add|list|generate|edit|delete|details StudentCourse: \n";
     cout << "Enter a, b, v to transcipts, result-sheets, list-Report: \n";
     cout << "Enter o, s, x, q to open, save, clean, quit: \n";
     cout << "Enter p,u,c,t; l,m,n,r; g,h,i,j; 1,2,3,4; 5,6,7,8; d,e,f,k; a,b,v or o,s,x,q: ";
@@ -290,4 +291,31 @@ void clean()
     Course::clean();
     StudentCourse::clean();
     Grade::clean();
+}
+
+void listReports()
+{
+    cout << endl;
+    cout << "Enter l, m, n, r to view List Report for Person|Student|Course|StudentCourse: ";
+    char key = cin.get();
+    cin.ignore();
+
+    switch (key)
+    {
+    case 'l':
+        Person::listReport();
+        break;
+    case 'm':
+        Student::listReport();
+        break;
+    case 'n':
+        Course::listReport();
+        break;
+    case 'r':
+        StudentCourse::listReport();
+        break;
+
+    default:
+        break;
+    }
 }
