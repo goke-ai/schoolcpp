@@ -21,21 +21,16 @@
                 "-fansi-escape-codes",
                 "-std=c++20",
                 "-stdlib=libc++",
-
                 "-I",
                 "/Users/goke/Library/CloudStorage/OneDrive-Personal/zs/core/cpp/CPPConsoleApp/include",
-
                 "-g",
-                
                 "/Users/goke/Library/CloudStorage/OneDrive-Personal/zs/core/cpp/CPPConsoleApp/src/**.cpp",
-
                 "$(find",
                 ".",
                 "-type",
                 "f",
                 "-iregex",
-                "'.*\\.cpp')",
-                
+                "'.*/.cpp')",
                 "-o",
                 "${workspaceFolder}/bin/debug/osx/schoolcpp"
             ],
@@ -58,21 +53,16 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-std=c++20",
-
                 "-I",
                 "/mnt/c/Users/gokel/OneDrive/zs/core/cpp/CPPConsoleApp/include",
-
                 "-g",
-
                 "/mnt/c/Users/gokel/OneDrive/zs/core/cpp/CPPConsoleApp/src/**.cpp",
-
                 "$(find",
                 ".",
                 "-type",
                 "f",
                 "-iregex",
-                "'.*\\.cpp')",
-
+                "'.*/.cpp')",
                 "-o",
                 "${workspaceFolder}/bin/debug/linux/schoolcpp"
             ],
@@ -93,11 +83,17 @@
             "label": "C/C++: cl.exe build debug",
             "command": "cl.exe",
             "args": [
+                "/std:c++20", // "/std:c++latest",
                 "/Zi",
+                "/Fo${workspaceFolder}/bin/debug/win/obj/",
                 "/EHsc",
-                "${workspaceFolder}\\*.cpp",
+                "/IC:/Users/gokel/OneDrive/zs/core/cpp/CPPConsoleApp/include", // external include/header
+                // cpp source files
+                "C:/Users/gokel/OneDrive/zs/core/cpp/CPPConsoleApp/src/**.cpp", // external from include/header
+                "${workspaceFolder}/models/*.cpp", // local subfolders
+                "${workspaceFolder}/*.cpp", // root folder
                 "/Fe:",
-                "${workspaceFolder}\\bin\\debug\\win\\schoolcpp.exe"
+                "${workspaceFolder}/bin/debug/win/schoolcpp.exe"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -106,7 +102,8 @@
                 "$msCompile"
             ],
             "group": {
-                "kind": "build"
+                "kind": "build",
+                "isDefault": false
             },
             "detail": "compiler: cl.exe"
         }
